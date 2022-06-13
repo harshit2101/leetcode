@@ -11,22 +11,52 @@
 class Solution {
 public:
     ListNode* removeNthFromEnd(ListNode* head, int n) {
-        ListNode* dummy= new ListNode();
-        dummy->next=head;
-        ListNode* slow=dummy;
-        ListNode* fast=dummy;
+          //BruteForce Method
+      //Time Complexity :- O(n) + O(n) = O(2*n) [Two Pass]
+      //Space Complexity:- O(1)
+       
+      //Counting the number of nodes in the linked list.       
+      ListNode *temp=head;
+      int countNodes=0;
+      while(temp!=NULL)
+      {
+          countNodes++;
+          temp=temp->next;
+      }
         
-        for(int i=1;i<=n;i++){
-            fast=fast->next;
-        }
+      //Checking the edge case when the 'n' i.e. node to be deleted
+      //from end of the list is equal to the number of nodes in the 
+      //linked list.
+      /*For Example :- 
+                       Input : [7,4] , n=2
+                       Output: [4]
+      */
+      if(countNodes==n)
+      {
+          ListNode *node=head;
+          head=head->next;
+          delete node;
+          return head;
+      }
         
-        while(fast && fast->next){
-            slow=slow->next;
-            fast=fast->next;
-        }
+      //If the node to be deleted is not the head of the list then we have 
+      //to reach one node before it.         
+      int difference = countNodes - n;
+      int counter=1;
+      temp=head;
+      while(counter!=difference)
+      {
+          counter++;
+          temp=temp->next;
+      }
         
-        slow->next=slow->next->next;
+      //The main logic to delete the nth node from the end.       
+      ListNode *node=temp->next;
+      temp->next=node->next;
+      delete node;
         
-        return dummy->next;
+      return head;
+    
+        
     }
 };
