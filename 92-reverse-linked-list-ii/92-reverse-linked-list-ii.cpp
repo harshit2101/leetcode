@@ -34,6 +34,8 @@ public:
         
         leftprev->next->next=curr;
         leftprev->next=prev;
-        return dummy->next;
+        head=dummy->next;
+        delete dummy;
+        return head;
     }
 };
