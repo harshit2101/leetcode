@@ -30,6 +30,8 @@ public:
         
         rhead->next=NULL;
         lhead->next=right->next;
-        return left->next;
+        head=left->next;
+        delete left,right;
+        return head;
     }
 };
