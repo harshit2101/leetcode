@@ -10,26 +10,27 @@ public:
 */
 
 class Solution {
+private:
+    Node* to_flatten(Node*head){
+        Node* tail=head;
+        while(head!=nullptr){
+            if(head->child){
+                tail=to_flatten(head->child);
+                if(head->next) head->next->prev = tail;
+                tail->next=head->next;
+                head->child->prev=head;
+                head->next = head->child;
+                head->child=nullptr;
+            }
+            tail = head;
+            head = head->next;
+        }
+        return tail;
+    }
+        
 public:
     Node* flatten(Node* head) {
-        Node* temp=head, *next, *runner;
-        
-        while(temp){
-            if(temp->child){
-                next=temp->next;
-                temp->next=temp->child;
-                temp->next->prev=temp;
-                temp->child=NULL;
-                
-                runner = temp->next;
-                while (runner->next) runner = runner->next;
-                runner->next = next;
-                if (runner->next) runner->next->prev = runner;
-            }
-            
-            temp=temp->next;
-        }
-        
+        Node *ptr = to_flatten(head);
         return head;
     }
 };
