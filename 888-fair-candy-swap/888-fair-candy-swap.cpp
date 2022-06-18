@@ -26,7 +26,7 @@ public:
     
         if (searchA.count(delta + y) > 0)
         {
-            return vector<int>{delta + y, y};
+            return {delta + y, y};
         }
     }
     
