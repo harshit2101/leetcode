@@ -24,7 +24,7 @@ public:
     for (auto y : B)    
     {
     
-        if (searchA.count(delta + y) > 0)
+        if (searchA.find(delta + y) !=searchA.end())
         {
             return {delta + y, y};
         }
