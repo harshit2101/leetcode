@@ -8,7 +8,7 @@ public:
     
     void push(int val) {
         st1.push(val);
-	    if (st2.empty() || val <= getMin())  st2.push(val);	 
+	    if (st2.empty() || val <= st2.top())  st2.push(val);	 
     }
     
     void pop() {
