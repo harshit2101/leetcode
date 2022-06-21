@@ -1,40 +1,30 @@
 class MinStack {
 public:
-    struct Node{
-        int val, mn;
-        Node* next;
-        Node(int _val, int _mn, Node*_next = NULL){
-            val = _val;
-            mn = _mn;
-            next = _next;
-        }
-    }*head;
+    stack<int> st1;
+    stack<int> st2;
+    MinStack() {
+        
+    }
+    
     void push(int val) {
-        if(!head){
-            head = new Node(val, val);
-        } 
-        else{
-            head = new Node(val, min(val, head->mn), head);
-        }
+        st1.push(val);
+	    if (st2.empty() || val <= getMin())  st2.push(val);	 
     }
     
     void pop() {
-        if(!head) return ;
-        Node* temp = head;
-        head = head->next;
-        delete(temp);
+        if (st1.top() == getMin()) st2.pop();
+        st1.pop();
     }
     
     int top() {
-        if(!head) return -1;
-        return head->val;
+        return st1.top();
     }
     
     int getMin() {
-        if(!head) return -1;
-        return head->mn;
+        return st2.top();
     }
 };
+
 /**
  * Your MinStack object will be instantiated and called as such:
  * MinStack* obj = new MinStack();
