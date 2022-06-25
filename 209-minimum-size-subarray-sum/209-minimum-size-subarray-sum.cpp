@@ -8,13 +8,11 @@ public:
         while(r<n){
             sum+=nums[r];
             
-            if(sum>=target){
-                while(sum>=target){
-                    sum-=nums[l];
-                    l++;
-                }             
-                ans=min(ans,r-l+2);
-            }
+            while(sum>=target){
+              ans=min(ans,r-l+1);
+              sum-=nums[l];
+                l++;
+            }             
             r++;
         }
         return ans==INT_MAX?0:ans;
