@@ -1,86 +1,90 @@
 class MyCircularDeque {
-private:
-    vector<int> buffer;
-    int cnt;
-    int k;
-    int front;
-    int rear;
 public:
-    /** Initialize your data structure here. Set the size of the deque to be k. */
-    MyCircularDeque(int k): buffer(k, 0), cnt(0), k(k), front(k - 1), rear(0) {
+    MyCircularDeque(int k) {
+        nums = vector<int> (k, 0);
+        lf = 0;
+        rt = 0;
+        length = 0;
     }
     
-    /** Adds an item at the front of Deque. Return true if the operation is successful. */
     bool insertFront(int value) {
-        if (cnt == k) {
+        if(isFull())
             return false;
-        }
-        buffer[front] = value;
-        front = (front - 1 + k) % k;
-        ++cnt;
-
+        
+        length++;
+        if(lf == 0)
+            lf = nums.size();
+        lf--;
+        nums[lf] = value;
         return true;
     }
     
-    /** Adds an item at the rear of Deque. Return true if the operation is successful. */
     bool insertLast(int value) {
-        if (cnt == k) {
+        if(isFull())
             return false;
-        }
-        buffer[rear] = value;
-        rear = (rear + 1) % k;
-        ++cnt;
-
+        
+        length++;
+        if(rt == nums.size())
+            rt = 0;
+        nums[rt] = value;
+        rt++;
         return true;
     }
     
-    /** Deletes an item from the front of Deque. Return true if the operation is successful. */
     bool deleteFront() {
-        if (cnt == 0) {
+        if(isEmpty())
             return false;
+        
+        length--;
+        lf++;
+        if(lf == nums.size()){
+            lf = 0;
         }
-        front = (front + 1) % k;
-        --cnt;
-
         return true;
     }
     
-    /** Deletes an item from the rear of Deque. Return true if the operation is successful. */
     bool deleteLast() {
-        if (cnt == 0) {
+        if(isEmpty())
             return false;
+        
+        length--;
+        if(rt == 0){
+            rt = nums.size();
         }
-        rear = (rear - 1 + k) % k;
-        --cnt;
-
+        rt--;
         return true;
     }
     
-    /** Get the front item from the deque. */
     int getFront() {
-        if (cnt == 0) {
+        if(isEmpty())
             return -1;
-        }
-        return buffer[(front + 1) % k];
+        
+        if(lf == nums.size())
+            return nums[0];
+        
+        return nums[lf];
     }
     
-    /** Get the last item from the deque. */
     int getRear() {
-        if (cnt == 0) {
+        if(isEmpty())
             return -1;
-        }
-        return buffer[(rear - 1 + k) % k];
+        if(rt == 0)
+            return nums.back();
+        return nums[rt - 1];
     }
     
-    /** Checks whether the circular deque is empty or not. */
     bool isEmpty() {
-        return cnt == 0;
+        return length == 0;
     }
     
-    /** Checks whether the circular deque is full or not. */
     bool isFull() {
-        return cnt == k;
+        return length == nums.size();
     }
+    
+private:
+    vector<int> nums;
+    int lf, rt; // deque: [lf...rt)
+    int length;
 };
 /**
  * Your MyCircularDeque object will be instantiated and called as such:
