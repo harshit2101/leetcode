@@ -13,6 +13,7 @@ public:
             int mini=min(box[0],t);
             ans+=(mini*box[1]);
             t-=mini;
+            if(t==0) break;
         }
         
         return ans;
