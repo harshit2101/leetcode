@@ -1,8 +1,7 @@
 class Solution {
 public:
     int trap(vector<int>& height) {
-        
-        int n =height.size();
+         int n =height.size();
         vector<int> maxl(n);
         vector<int> maxr(n);
         maxl[0]=height[0];
@@ -16,11 +15,11 @@ public:
             maxr[i]=max(maxr[i+1],height[i]);
         }
         
-        vector<int> water(n);
+    
         int sum=0;
         for(int i=0;i<n;i++){
-            water[i]=min(maxl[i],maxr[i]) -height[i];
-            sum+=water[i];
+            int mini=min(maxl[i],maxr[i]) -height[i];
+            sum+=mini;
         }
         return sum;
     }
