@@ -9,63 +9,22 @@ using namespace std;
 
 class Solution 
 {
-   private:
-    bool know(vector<vector<int> >& M,int a,int b, int n){
-        if(M[a][b]==1){
-            return true;
-        }
-        else
-        return false;   
-    }
     public:
     //Function to find if there is a celebrity in the party or not.
     int celebrity(vector<vector<int> >& M, int n) 
-    {
-       stack<int> s;
+   {
+
+       vector<int> cel;
+
+       int ct=0,ans=-1;
+       for(int i=0;i<n;i++) cel.push_back(0);
        for(int i=0;i<n;i++){
-           s.push(i);
+           if(M[i]==cel) {ct++;ans=i;};
        }
-       
-       while(s.size()>1){
-            int a = s.top();
-            s.pop();
-            
-            int b = s.top();
-            s.pop();
-           
-            if(know(M,a,b,n)){
-               s.push(b);
-            }
-            else{
-                s.push(a);
-            }
-       }
-       int celebrity = s.top();
-       
-       int count_0=0;
-       
-        for(int i=0;i<n;i++){
-            if(M[celebrity][i]==0){
-                count_0++;
-            }
-        }
-        
-        if(count_0!=n){
-            return -1;
-        }
-        
-         int count_1=0;
-       
-        for(int i=0;i<n;i++){
-            if(M[i][celebrity]==1){
-                count_1++;
-            }
-        }
-        if(count_1!=n-1){
-            return -1;
-        }
-        return celebrity;
-    }
+       if(ct!=1) return -1;
+       return ans;
+
+}
 };
 
 // { Driver Code Starts.
