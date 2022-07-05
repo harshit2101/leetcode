@@ -11,24 +11,26 @@
  */
 class Solution {
 public:
-    vector<int> postorderTraversal(TreeNode* root) {
+    vector<int> inorderTraversal(TreeNode* root) {
         
-        vector<int> nodes;
-        stack<TreeNode*> todo;
-        TreeNode* last = NULL;
-        while (root || !todo.empty()) {
-            if (root) {
-                todo.push(root);
-                root = root -> left;
-            } else {
-                TreeNode* node = todo.top();
-                if (node -> right && last != node -> right) {
-                    root = node -> right;
-                } else {
-                    nodes.push_back(node -> val);
-                    last = node;
-                    todo.pop();
+       vector<int> nodes;
+        while (root) {
+            if (root -> left) {
+                TreeNode* pre = root -> left;
+                while (pre -> right && pre -> right != root) {
+                    pre = pre -> right;
                 }
+                if (!pre -> right) {
+                    pre -> right = root;
+                    root = root -> left;
+                } else {
+                    pre -> right = NULL;
+                    nodes.push_back(root -> val);
+                    root = root -> right;
+                }
+            } else {
+                nodes.push_back(root -> val);
+                root = root -> right;
             }
         }
         return nodes;
