@@ -27,9 +27,9 @@ public:
             TreeNode *p = q.front();
             q.pop();
             
-            if(p -> left != NULL)
+            if(p -> left)
                 q.push(p -> left);
-            if(p -> right != NULL)
+            if(p -> right)
                 q.push(p -> right);
         }
     }
