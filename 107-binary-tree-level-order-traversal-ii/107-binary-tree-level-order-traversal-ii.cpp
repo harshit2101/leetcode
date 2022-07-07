@@ -11,22 +11,25 @@
  */
 class Solution {
 public:
-    int depth(TreeNode *root) {
-    if (!root) return 0;
-    return max(depth(root->left),depth(root->right))+1;
-    }
-
-    void levelOrder(vector<vector<int>> &ans, TreeNode *node, int level) {
-        if (!node) return;
-        ans[level].push_back(node->val);
-        levelOrder(ans,node->left,level-1);
-        levelOrder(ans,node->right,level-1);
-    }
-
     vector<vector<int>> levelOrderBottom(TreeNode* root) {
-        int d = depth(root);
-        vector<vector<int>> ans(d,vector<int> {});
-        levelOrder(ans,root,d-1);
-        return ans;
+        
+        vector<vector<int>> ret;
+        if (root == NULL) return ret;
+        queue<TreeNode *> q;
+        q.push(root);
+        while (!q.empty()) {
+            int l = q.size();
+            vector<int> curlayer;
+            for (int i = 0; i < l; i++) {
+                TreeNode *cur = q.front();
+                q.pop();
+                curlayer.push_back(cur->val);
+                if (cur->left != NULL) q.push(cur->left);
+                if (cur->right != NULL) q.push(cur->right);
+            }
+            ret.push_back(curlayer);
+        }
+        reverse(ret.begin(), ret.end());
+        return ret;
     }
 };
