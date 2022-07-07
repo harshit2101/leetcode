@@ -120,23 +120,24 @@ struct Node
     Node* left, * right;
 }; */
 
-void solve(Node* root, map<int, vector<int>>&mp, int index)
-{
-   if(!root)
-       return;
-   mp[index].push_back(root->data);
-   solve(root->left, mp, index+1);
-   solve(root->right, mp, index);
-}
 vector<int> diagonal(Node *root)
 {
-  map<int, vector<int>>mp;
-  solve(root, mp, 1);
   vector<int>v;
-  for(auto i:mp)
+  if(root==NULL)
+  return v;
+  queue<Node*>q;
+  q.push(root);
+  while(!q.empty())
   {
-      for(auto j:i.second)
-           v.push_back(j);
+      Node*curr=q.front();
+      q.pop();
+      while(curr!=NULL)
+      {
+          v.push_back(curr->data);
+          if(curr->left!=NULL)
+          q.push(curr->left);
+          curr=curr->right;
+      }
   }
   return v;
 }
