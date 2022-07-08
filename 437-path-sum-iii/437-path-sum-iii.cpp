@@ -11,22 +11,34 @@
  */
 class Solution {
 public:
-    int count=0;
-    void solve(TreeNode* root, long long target){
-        if(!root) return;
-        if(root->val==target) count++;
-        
-        solve(root->left,target-root->val);
-        solve(root->right,target-root->val);
-    }
-    
-    int pathSum(TreeNode* root, int targetSum) {
-        // int count=0;
-        if(root){
-            solve(root,targetSum);
-            pathSum(root->left,targetSum);
-            pathSum(root->right,targetSum);
+     void getSum(TreeNode*root,unordered_map<int,int>&values,long currentSum,int &targetSum, int&path)
+    {
+        if(root==NULL)
+        {
+            return;
         }
-        return count;
+        currentSum+=root->val;
+        if(currentSum==targetSum)
+        {
+            path++;
+        }
+        if(values.find(currentSum-targetSum)!=values.end())
+        {
+            path+=values[currentSum-targetSum];
+        }
+        values[currentSum]+=1;
+        getSum(root->left,values,currentSum,targetSum,path);
+        getSum(root->right,values,currentSum,targetSum,path);
+        values[currentSum]-=1;
+        return;
+    }
+public:
+    int pathSum(TreeNode* root, int targetSum) 
+    {
+        unordered_map<int,int> values;
+        int path=0;
+        long curSum =0;
+        getSum(root,values,curSum,targetSum,path);
+        return path;
     }
 };
