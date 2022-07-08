@@ -30,7 +30,7 @@ public:
         getSum(root->left,values,currentSum,targetSum,path);
         getSum(root->right,values,currentSum,targetSum,path);
         values[currentSum]-=1;
-        return;
+        // return;
     }
 public:
     int pathSum(TreeNode* root, int targetSum) 
