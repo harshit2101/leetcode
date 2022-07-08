@@ -110,55 +110,37 @@ struct Node
 };
 */
 // your task is to complete this function
-int solve(Node* root, int k, int data, int &ans, int level=0){
-   if(root==NULL){
-       return -1;
-   }
-   if(root->data==data){
-       return level;
-   }
 
-   // left subtree
-   int l=solve(root->left,k,data,ans,level+1);
-   // right subtree
-   int r=solve(root->right,k,data,ans,level+1);
-   
-   
-   if(l==-1 && r==-1){
-       return -1;
-   }
-   
-   else if(l!=-1 && r==-1){
-       if(l-level==k){
-           ans=root->data;
-           return -1;
-       }
-       return l;   
-   }
-   
-   else if(l==-1 && r!=-1){
-       if(r-level==k){
-           ans=root->data;
-           return -1;
-       }
-       return r;   
-   }
-   
-   else{
-       if(l-level==k){
-           ans=root->data;
-           return -1;
-       }else if(r-level==k){
-           ans=root->data;
-           return -1;
-       }
-       return max(l,r);
-   }
-
+Node* solve(Node *root, int& k, int node){
+    if(!root) return NULL;
+    
+    if(root->data==node) return root;
+    
+    Node* left=solve(root->left,k,node);
+    Node* right=solve(root->right,k,node);
+    
+    if(left && !right){
+        k--;
+        if(k<=0){
+            k=INT_MAX;
+            return root;
+        }
+        return left;
+    }
+    
+    if(!left && right){
+        k--;
+        if(k<=0){
+            k=INT_MAX;
+            return root;
+        }
+        return right;
+    }
+    return NULL;
 }
 
 int kthAncestor(Node *root, int k, int node){
-   int ans=-1;
-   solve(root,k,node,ans);
-   return ans;
+   Node* ans=solve(root,k,node);
+   if(ans==NULL || ans->data==node) return -1;
+   return ans->data;
 }
