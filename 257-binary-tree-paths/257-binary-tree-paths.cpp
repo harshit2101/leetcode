@@ -10,23 +10,25 @@
  * };
  */
 class Solution {
-public:
-   vector<string> binaryTreePaths(TreeNode* root) {
-        vector<string> res;
-        if (root == NULL) return res;
-        dfs(root, to_string(root->val), res);
-        return res;
-    }
     
-    void dfs(TreeNode* root, string path, vector<string>& res) {
-        if (root->left == NULL && root->right == NULL) {
-            res.push_back(path);
+    void solve(TreeNode* root, int target,vector<vector<int>>& ans,vector<int>& temp){
+        if(!root) return;
+        
+        target-=root->val;
+        temp.push_back(root->val);
+        if(target==0 && !root->left && !root->right){
+            ans.push_back(temp);
         }
         
-        if (root->left != NULL)
-            dfs(root->left, path + "->" + to_string(root->left->val), res);
-        
-        if (root->right != NULL)
-            dfs(root->right, path + "->" + to_string(root->right->val), res);
+        solve(root->left,target,ans,temp);
+        solve(root->right,target,ans,temp);
+        temp.pop_back();
+    }
+public:
+    vector<vector<int>> pathSum(TreeNode* root, int targetSum) {
+        vector<vector<int>> ans;
+        vector<int> temp;
+        solve(root,targetSum,ans,temp);
+        return ans;
     }
 };
