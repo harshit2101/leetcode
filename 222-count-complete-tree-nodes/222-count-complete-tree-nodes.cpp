@@ -14,12 +14,31 @@ public:
     int countNodes(TreeNode* root) {
         if(!root) return 0;
         
-        int left=0,right=0;
+        int left=lh(root);
+        int right=rh(root);
         
-        if(root->left) 
-            left=countNodes(root->left);
-        if(root->right) 
-            right=countNodes(root->right);
-        return left+right+1;
+        if(left==right){
+            return (1<<left)-1;
+        }
+        
+        return countNodes(root->left)+ countNodes(root->right) +1;
+    }
+    
+    int lh(TreeNode* root){
+        int h=0;
+        while(root){
+            h++;
+            root=root->left;
+        }
+        return h;
+    }
+    
+    int rh(TreeNode* root){
+        int h=0;
+        while(root){
+            h++;
+            root=root->right;
+        }
+        return h;
     }
 };
