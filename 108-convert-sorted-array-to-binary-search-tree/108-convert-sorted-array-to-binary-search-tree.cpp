@@ -12,21 +12,19 @@
 class Solution {
 public:
     
-    TreeNode* solve(int s,int e,vector<int>& nums){
-        if(s>=e) return NULL;
-        
-        int mid=s+(e-s)/2;
-        TreeNode* root=new TreeNode(nums[mid]);
-        root->left=solve(s,mid,nums);
-        root->right=solve(mid+1,e,nums);
-        
+    TreeNode* solve(vector<int>& nums, int low , int high)
+    {
+        if(low>high) return NULL;
+        int mid= low+(high-low)/2;
+        TreeNode* root= new TreeNode(nums[mid]);
+        root->left=solve(nums,low,mid-1);
+        root->right=solve(nums,mid+1,high);
         return root;
     }
     
     TreeNode* sortedArrayToBST(vector<int>& nums) {
+        TreeNode* root= solve(nums,0,nums.size()-1);
+        return root;
         
-        int s=0,e=nums.size();
-        
-        return solve(s,e,nums);
     }
 };
