@@ -12,22 +12,33 @@
 class Solution {
 public:
     
-    bool isValid(TreeNode* root,long min,long max){
-        
-        if(root==NULL) return true;
-        
-        if(root->val>min && root->val<max){
-            bool left=isValid(root->left,min,root->val);
-            bool right=isValid(root->right,root->val,max);
-            return left&& right; 
+    void inorder(TreeNode* root ,vector<int> & TT ){
+        if(!root){
+            return;
         }
-        else
-            return false;
-            
+        
+        inorder(root->left,TT);
+        
+        TT.push_back(root->val);
+        
+        inorder(root->right,TT);
+        
     }
     
     bool isValidBST(TreeNode* root) {
         
-        return isValid(root,LONG_MIN,LONG_MAX);
+        vector<int> TT;
+        
+        inorder(root, TT);
+        
+        
+        for(int i=1; i< TT.size();i++){
+            if(TT[i]<=TT[i-1]){
+                //not valid
+                return false;
+            }
+        }
+        
+        return true;
     }
 };
