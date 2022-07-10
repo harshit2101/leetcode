@@ -11,20 +11,37 @@
  */
 class Solution {
 public:
-    void inorder(TreeNode* root,vector<int>& v){
-        if(!root){
-            return ;
-        }
-        
-        inorder(root->left,v);
-        v.push_back(root->val);
-        inorder(root->right,v);
-    }
     int kthSmallest(TreeNode* root, int k) {
-        vector<int> v;
+        TreeNode* cur = root;
         
-        inorder(root,v);
+        int ans, count = 1;
         
-        return v[k-1];
+        while (cur) {
+            
+            if ( !cur->left ) {
+                if (count == k) ans = cur->val;
+                cur = cur->right;
+                ++count;
+                
+            } else {
+                TreeNode* tmp = cur->left;
+				
+                // Going to the right most element of left Subtree.
+                while (tmp->right && tmp->right != cur)
+                    tmp = tmp->right;
+                
+                if ( tmp->right ) {
+                    tmp->right = nullptr;
+                    if (count == k) ans = cur->val;
+                    cur = cur->right;
+                    ++count;
+                    
+                } else {
+                    tmp->right = cur;
+                    cur = cur->left;
+                }
+            }
+        }
+        return ans;
     }
 };
