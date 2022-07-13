@@ -1,68 +1,69 @@
-struct Node {    // Trie Structure
-    Node* arr[26];
-    bool isEnd = false;
-    
-    bool contains(char ch) {
-        return arr[ch-'a'] != NULL;
+struct Node {
+    bool f = false;
+    Node* p[26];
+    Node() {
+        for (int i=0; i<26; i++)
+            p[i] = nullptr;
     }
     
-    void put(char ch, Node* newNode) {
-        arr[ch-'a'] = newNode;
+    bool in(char c) {
+        return p[c - 'a'] != nullptr;
     }
     
-    Node* getNext(char ch) {
-        return arr[ch-'a'];
+    void insert(char c) {
+        if (!in(c))
+            p[c - 'a'] = new Node();
     }
     
-    void setEnd() {
-        isEnd = true;
+    Node* get(char c) {
+        return p[c - 'a'];
     }
-    
-    bool getEnd() {
-        return isEnd;
-    }
-    
 };
 
 class WordDictionary {
-    Node* root;
+    Node* n;
 public:
     WordDictionary() {
-        root = new Node();
+        n = new Node();
     }
     
-    void addWord(string word) {  // Insert word into Trie
-        Node* temp = root;
-        for(auto& ch : word) {
-            if(!temp->contains(ch)) {
-                temp->put(ch, new Node());
+    void addWord(string word) {
+        Node *p = n;
+        for (auto k: word) {
+            if (!p->in(k)) {
+                p->insert(k);
             }
-            temp = temp->getNext(ch);
+            p = p->get(k);
         }
-        temp->setEnd();
+        p->f = true;
     }
     
-    bool check(Node* node, string& word, int idx=0) {
-        if(!node) return false;
-        if(idx == word.size()) return node->getEnd();
+    bool find(string &s, int i, Node* p) {
+        if (i == s.size()) {            
+            return p->f;
+        }
+
+        if (s[i] != '.') {
+            if (p->in(s[i]))
+                return find(s, i+1, p->get(s[i]));
+            return false;
+        }
         
-        if(word[idx] == '.') {
-            for(char ch = 'a'; ch <= 'z'; ch++) {
-                if(!node->contains(ch)) continue;
-                if(check(node->getNext(ch), word, idx+1)) return true;
-            }
-        }
-        else if(node->contains(word[idx])) {
-             return check(node->getNext(word[idx]), word, idx+1);
+        for (int j=0; j<26; j++) {
+            if (p->p[j] != nullptr)
+                if (find(s, i+1, p->p[j]))
+                    return true;
         }
         
         return false;
     }
     
     bool search(string word) {
-        return check(root, word);
+        return find(word, 0, n);
     }
 };
+
+
 
 /**
  * Your WordDictionary object will be instantiated and called as such:
