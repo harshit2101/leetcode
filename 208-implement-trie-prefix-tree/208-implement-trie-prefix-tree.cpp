@@ -1,81 +1,69 @@
-class TrieNode{
-
-public:
-    bool isEnd;
-    TrieNode* children[26];
-    TrieNode()
-    {
-        isEnd = false;
-        for(int i=0; i<26; i++)
-        {
-            children[i] = NULL;
-        }
+struct Node {
+    Node* link[26];
+    bool flag=false;
+    // check if reference trie is present or not
+    bool containKey(char ch){ 
+        return (link[ch-'a']!=NULL);
+    }
+    // create a new reference trie
+    void createKey (char ch, Node* node){
+        link[ch-'a']=node;
+    }
+    // get the next reference trie
+    Node* next(char ch){
+        return link[ch-'a'];
+    }
+    // set flag true at the last reference of trie
+    void setEnd(){
+        flag=true;
+    }
+    // check whether the word is terminated or not 
+    bool isEnd(){
+        return flag;
     }
 };
 
 class Trie {
+    Node* root;
 public:
-    /** Initialize your data structure here. */
-    TrieNode* root;
+    // call constructor to create a new object
     Trie() {
-        
-        root = new TrieNode();
-        
+        root= new Node();
     }
     
-    /** Inserts a word into the trie. */
     void insert(string word) {
-        
-        int n = word.size();
-        TrieNode* parent = root;
-        for(int i=0; i<n; i++)
-        {
-            int val = word[i]-'a';
-            if(parent->children[val]==NULL)
-            {
-                parent->children[val] = new TrieNode();
+        Node* node=root;
+        for(auto& ch: word){
+            // check if the current character is present on current trie node or not
+            if(!node->containKey(ch)){ // if not, create a new reference trie
+                node->createKey(ch, new Node());
             }
-            parent = parent->children[val];
+            node=node->next(ch); // move to the current node's reference trie
         }
-        parent->isEnd = true;
+        node->setEnd(); // set the word terminated
     }
     
-    /** Returns if the word is in the trie. */
     bool search(string word) {
-        
-        int n = word.size();
-        TrieNode* parent = root;
-        for(int i=0; i<n; i++)
-        {
-            int val = word[i]-'a';
-            if(parent->children[val]==NULL)
-            {
-                return false;
-            }
-            parent = parent->children[val];
+        Node* node=root;
+        for(auto& ch:word){
+            // check if the current character is present on current trie node or not
+            if(!node->containKey(ch)) return false; // if not, return false
+            node=node->next(ch); // else move to the next reference trie
         }
-        return parent->isEnd;
-        
+        return node->isEnd(); // check the word terminated or not, if yes return true else false
     }
     
-    /** Returns if there is any word in the trie that starts with the given prefix. */
     bool startsWith(string prefix) {
-        
-        int n = prefix.size();
-        TrieNode* parent = root;
-        for(int i=0; i<n; i++)
-        {
-            int val = prefix[i]-'a';
-            if(parent->children[val]==NULL)
-            {
-                return false;
-            }
-            parent = parent->children[val];
+        Node* node=root;
+        for(auto& ch:prefix){
+            // check if the current prefix character is present on current trie node or not
+            if(!node->containKey(ch)) return false; // if not, return false
+            node=node->next(ch); // else move to the next reference trie
         }
-        return true;
-        
+        return true; // not required to check the termination
     }
 };
+
 /**
  * Your Trie object will be instantiated and called as such:
  * Trie* obj = new Trie();
