@@ -1,73 +1,124 @@
-struct Node {
-    Node* arr[27];
-    int index = -1;
+class Trie
+{
+    public:
+    struct Node
+    {
+        private:
+            Node *child[27];
+            int endIdx;
+        
+        public:
+            bool contains(char &ch)
+            {                    
+                return (child[ch - 'a'] != NULL);
+            } 
+        
+            void putNode(char &ch, Node *newNode)
+            {
+                child[ch - 'a'] = newNode;
+            }
+        
+            Node *getNext(char &ch)
+            {                
+                return child[ch - 'a'];
+            }
+            
+            void setIdx(int &i)
+            {
+                endIdx = i;
+            }
+        
+            int getIdx()
+            {
+                return endIdx;
+            }
+    };
     
-    bool contains(char ch) {
-        return arr[ch-'a'] != NULL;
+    Node *root;
+    
+    public:
+    Trie()
+    {
+        root = new Node();
     }
     
-    void put(char ch, Node* newNode) {
-        arr[ch-'a'] = newNode;
+    void insert(string &word, int &idx)
+    {
+        Node *temp = root;
+        
+        for(auto &ch : word)
+        {
+            if(!temp -> contains(ch))
+            {
+                temp -> putNode(ch, new Node());
+            }
+            
+            temp = temp -> getNext(ch);
+            temp -> setIdx(idx);
+        }
+        
     }
     
-    Node* getNext(char ch) {
-        return arr[ch-'a'];
-    }
-    
-    void setIndex(int idx) {
-        index = idx;
-    }
-    
-    int getIndex() {
-        return index;
+    int startsWith(string &word)
+    {
+        Node *temp = root;
+        
+        for(auto &ch : word)
+        {
+            if(!temp -> contains(ch))
+            {
+                return -1;
+            }
+            
+            temp = temp -> getNext(ch);
+        }
+        
+        return temp -> getIdx();
     }
 };
 
 class WordFilter {
-    Node* trie;
+    Trie trie;
 public:
-    
-    void insert(Node* root, string& s, int idx) {
-        for(auto& ch : s) {
-            if(!root->contains(ch)) {
-                root->put(ch, new Node());
-            }
-            root = root->getNext(ch);
-            root->setIndex(idx);
-        }
-    }
-    
     WordFilter(vector<string>& words) {
-        trie = new Node();
+        /*
         
-        int idx = 0;
-        string s = "";
+        We are storing word as suffix + '{' + prefix, index 
+        why '{' ? you can use any special character, but '{' - 'a' will give 26th index
+        so, we don't need to take care of special character.
         
-        for(auto& word : words) {
-            s = "{" + word;
-            insert(trie, s, idx);
+        apple -> suffix + '{' + prefix, i
+            apple{apple 0
+            pple{apple 0
+            ple{apple 0
+            le{apple 0
+            e{apple 0
+            {apple 0
+
+
+        */
+        int len = words.size();
+        for(int i = 0; i < len; i++)
+        {            
+            string str = words[i];
+            int n = str.size();
             
-            for(int i=word.size()-1; i>=0; i--) {
-                s = word[i] + s;
-                insert(trie, s, idx);
+            for(int j = 0; j <= n; j++)
+            {                
+                string cur = str.substr(j) + '{' + str;
+                
+                trie.insert(cur, i);
             }
-            
-            idx++;
         }
     }
     
     int f(string prefix, string suffix) {
         
-        Node* temp = trie;
+        string cur = suffix + '{' + prefix;
         
-        string match = suffix + "{" + prefix;
+        // just use startswith function and pass suffix + '{' + prefix to find index
         
-        for(auto& ch : match) {
-            if(!temp || !temp->contains(ch)) return -1;
-            temp = temp->getNext(ch);
-        }
-        
-        return temp->getIndex();
+        return trie.startsWith(cur);
     }
 };
 /**
