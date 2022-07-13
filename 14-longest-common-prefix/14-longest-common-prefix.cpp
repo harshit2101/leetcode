@@ -1,24 +1,79 @@
+class TrieNode
+{
+	public:
+		bool isWord;
+        int countPrefix;
+		TrieNode *child[26];
+	
+		TrieNode()
+		{
+			isWord=0;
+            countPrefix=0;
+			for(TrieNode* &i:child)
+			{
+				i=NULL;
+			}
+		}
+};
+
+class Trie
+{
+	public: 
+		Trie()
+		{
+			head=new TrieNode();
+		}
+	
+		TrieNode *head=NULL;
+	
+		void insert(string word)
+		{
+			TrieNode *temp=head;
+			
+			for(char &i:word)
+			{
+				if(temp->child[i-'a']==NULL)
+				{
+					temp->child[i-'a']=new TrieNode();
+				}
+				temp=temp->child[i-'a'];
+                temp->countPrefix++;
+			}
+			temp->isWord=1;
+		}
+};
+
 class Solution {
 public:
-    string longestCommonPrefix(vector<string>& str) {
-         
-        int n = str.size();
+    string longestCommonPrefix(vector<string>& strs) 
+    {
+        int n=strs.size();
         
-        if(n==0) return "";
+        Trie trie;
+	
+        for(string &i:strs)
+        {
+            trie.insert(i);
+        }
+
+        string ans;
         
-        string ans  = "";
+        string res=strs.back();
         
-        sort(begin(str), end(str));
-        string a = str[0];
-        string b = str[n-1];
+        TrieNode* temp=trie.head;
         
-        for(int i=0; i<a.size(); i++){
-            if(a[i]==b[i]){
-                ans = ans + a[i];
+        for(char &i:res)
+        {          
+            if(temp->child[i-'a'] && temp->child[i-'a']->countPrefix==n)
+            {
+                ans+=i;
             }
-            else{
-                break;
+            else
+            {
+                break;   
             }
+            
+            temp=temp->child[i-'a'] ;
         }
         
         return ans;
