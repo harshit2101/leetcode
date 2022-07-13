@@ -1,68 +1,73 @@
-struct Node {
-    Node* link[26];
-    bool flag=false;
-    // check if reference trie is present or not
-    bool containKey(char ch){ 
-        return (link[ch-'a']!=NULL);
+class node{
+    public:
+    node* links[26];
+    bool flag = false;
+    
+    bool containsKey(char ch){
+        return (links[ch-'a']!=NULL);
     }
-    // create a new reference trie
-    void createKey (char ch, Node* node){
-        link[ch-'a']=node;
+    
+    void put(char ch, node* newn){
+        links[ch-'a'] = newn;
     }
-    // get the next reference trie
-    Node* next(char ch){
-        return link[ch-'a'];
+    
+    node* get(char ch){
+        return links[ch-'a'];
     }
-    // set flag true at the last reference of trie
-    void setEnd(){
-        flag=true;
+    
+    void markEnd(){
+        flag = true;
     }
-    // check whether the word is terminated or not 
-    bool isEnd(){
+    
+    bool getEnd(){
         return flag;
     }
 };
 
 class Trie {
-    Node* root;
 public:
-    // call constructor to create a new object
+    node* root;
     Trie() {
-        root= new Node();
+        root = new node();
     }
     
     void insert(string word) {
-        Node* node=root;
-        for(auto& ch: word){
-            // check if the current character is present on current trie node or not
-            if(!node->containKey(ch)){ // if not, create a new reference trie
-                node->createKey(ch, new Node());
+        node* temp = root;
+        for (int i=0; i<word.size(); i++){
+            // if doesnt contains
+            if (!temp->containsKey(word[i])){
+                temp->put(word[i], new node());
             }
-            node=node->next(ch); // move to the current node's reference trie
+            // move to next
+            temp = temp->get(word[i]);
         }
-        node->setEnd(); // set the word terminated
+        temp->markEnd();
     }
     
     bool search(string word) {
-        Node* node=root;
-        for(auto& ch:word){
-            // check if the current character is present on current trie node or not
-            if(!node->containKey(ch)) return false; // if not, return false
-            node=node->next(ch); // else move to the next reference trie
+        node* temp = root;
+        for (int i=0; i<word.size(); i++){
+            if (!temp->containsKey(word[i])){
+                return false;
+            }
+            temp = temp->get(word[i]);
         }
-        return node->isEnd(); // check the word terminated or not, if yes return true else false
+        return (temp->getEnd());
     }
     
-    bool startsWith(string prefix) {
-        Node* node=root;
-        for(auto& ch:prefix){
-            // check if the current prefix character is present on current trie node or not
-            if(!node->containKey(ch)) return false; // if not, return false
-            node=node->next(ch); // else move to the next reference trie
+    bool startsWith(string word) {
+        node* temp = root;
+        for (int i=0; i<word.size(); i++){
+            if (!temp->containsKey(word[i])){
+                return false;
+            }
+            temp = temp->get(word[i]);
         }
-        return true; // not required to check the termination
+        return true;
     }
 };
+
+
 
 /**
  * Your Trie object will be instantiated and called as such:
