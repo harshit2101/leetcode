@@ -6,25 +6,15 @@ using namespace std;
 class Solution {
   public:
     
-    bool solve(int node,int V,vector<int>& vis, vector<int> adj[]){
+    
+    bool solve(int node,vector<int> adj[],vector<int>& vis,int parent){
+        vis[node]=1;
         
-        queue<pair<int,int>> q;
-        
-        vis[node]=true;
-        q.push({node,-1});
-        
-        while(!q.empty()){
-            int curr=q.front().first;
-            int prev=q.front().second;
-            q.pop();
-            
-            for(auto it:adj[curr]){
-                if(!vis[it]){
-                    vis[it]=true;
-                    q.push({it,curr});
-                }
-                else if(prev!=it) return true;
+        for(auto it:adj[node]){
+            if(vis[it]==0){
+                if(solve(it,adj,vis,node)) return true;
             }
+            else if(it!=parent) return true;
         }
         return false;
     }
@@ -33,7 +23,7 @@ class Solution {
         vector<int> vis(V+1,0);
         for(int i=0;i<V;i++){
             if(!vis[i]){
-                if(solve(i,V,vis,adj)) return true;
+                if(solve(i,adj,vis,-1)) return true;
             }
         }
         return false;
