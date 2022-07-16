@@ -5,9 +5,10 @@ public:
         temp.push_back(node);
         
         if(node==graph.size()-1) ans.push_back(temp);
-        
-        for(auto it: graph[node]){
-            solve(graph,ans,temp,it);
+        else{
+            for(auto it: graph[node]){
+                solve(graph,ans,temp,it);
+            }
         }
         temp.pop_back();
     }
