@@ -1,49 +1,35 @@
 class Solution {
 public:
     
+   int dp[50000];
     
-    bool subsetSum(vector<int>& nums,int sum){
-        int n=nums.size();
-        int dp[n+1][sum+1];
+    bool f(int i, int sum, vector<int>& nums, int n)
+    {
+        if(sum == 0)
+            return true;
+    
+        if(i == n or sum < 0)
+            return false;
         
-        for(int i=0;i<n+1;i++){
-            for(int j=0;j<sum+1;j++){
-                if(i==0) dp[i][j]=false;
-                if(j==0) dp[i][j]=true;
-            }
-        }
+        if(dp[sum] != -1)
+            return dp[sum];
         
-        for(int i=1;i<n+1;i++){
-            for(int j=1;j<sum+1;j++){
-                
-                // included + choice
-                if(nums[i-1]<=j){
-                    dp[i][j]=dp[i-1][j-nums[i-1]] || dp[i-1][j];
-                }
-                
-                
-                // excluded
-                else{
-                    dp[i][j]=dp[i-1][j];
-                }
-            }
-        }
-        
-        return dp[n][sum];
+        return dp[sum] = f(i + 1, sum - nums[i], nums, n) || f(i + 1, sum, nums, n);
     }
     
-    bool canPartition(vector<int>& nums) {
-        
-        int n=nums.size();
-        int sum=0;
-        for(int i=0;i<n;i++){
-            sum+=nums[i];
+    bool canPartition(vector<int>& nums) 
+    {
+        int n = (int)nums.size();
+        int sum = 0;
+        for(int i = 0; i < n; i++)
+        {
+            sum += nums[i];
         }
-        
-        if(sum%2!=0) return false;
-        
-        else{
-            return subsetSum(nums,sum/2);
+        if(sum & 1)
+        {
+            return false;
         }
+        memset(dp, -1, sizeof(dp));
+        return f(0, sum / 2, nums, n);
     }
 };
