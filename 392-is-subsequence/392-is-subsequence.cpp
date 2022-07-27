@@ -1,19 +1,13 @@
 class Solution {
 public:
     bool isSubsequence(string s, string t) {
-        int n=s.size(),m=t.size();
-        vector<vector<int>> dp(n+1,vector<int>(m+1,0));
-        
-        for(int i=1;i<=n;i++)
-        {
-            for(int j=1;j<=m;j++)
-            {
-                if(s[i-1]==t[j-1])
-                    dp[i][j]=dp[i-1][j-1]+1;
-                else dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+        int sIndex = 0, tIndex = 0;
+        while(tIndex < t.size() && sIndex < s.size()) {
+            if(s[sIndex] == t[tIndex]) {
+                sIndex++;
             }
+            tIndex++;
         }
-        return dp[n][m]==n;
-    
+        return sIndex == s.size();
     }
 };
