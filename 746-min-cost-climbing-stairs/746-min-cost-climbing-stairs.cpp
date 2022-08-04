@@ -1,19 +1,19 @@
 class Solution {
 public:
-      int minCostClimbingStairs(vector<int>& cost) {
-        if (cost.size() == 2) return min(cost[0], cost[1]);
-        
-        int n = cost.size();
-        
-        int first = cost[0];
-        int second = cost[1];
-        
-        for (int i = 2; i < n; i++) {
-            int curr = cost[i] + min(first, second);
-            first = second;
-            second = curr;
+    int climbStairs(int n) {
+        if(n == 1 || n==2)
+        {
+            return n;
         }
-        
-        return min (first, second);
+        int a = 1;
+        int b = 2;
+        int c = 0;
+        for(int i=3;i<=n;i++)
+        {
+            c = a + b;
+            a = b;
+            b = c;
+        }
+        return c;
     }
 };
