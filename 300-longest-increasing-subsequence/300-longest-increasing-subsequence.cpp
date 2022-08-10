@@ -1,27 +1,26 @@
 class Solution {
 public:
-    int lengthOfLIS(vector<int>& arr1) {
-        vector<int> temp = arr1;
-        sort(temp.begin(), temp.end());
+    
+    int dp[2500][2501];
+    
+    int solve(int ind,int prev, vector<int>& nums, int n){
+        if(ind==n) return 0;
+        if(dp[ind][prev+1]!=-1) return dp[ind][prev+1];
         
-        vector<int> arr2;
-        arr2.push_back(temp[0]);
-        for(int i=1; i<temp.size(); i++){
-            if(temp[i]!=temp[i-1]) arr2.push_back(temp[i]);
+        int len=0;
+        
+        len=solve(ind+1,prev,nums,n);
+        if(prev==-1 || nums[ind]>nums[prev]){
+            len=max(len,1 + solve(ind+1,ind,nums,n));
         }
         
-        int a = arr1.size();
-        int b = arr2.size();
-        int dp[a+1][a+1];
+        return dp[ind][prev+1]= len;
+    }
+    
+    int lengthOfLIS(vector<int>& nums) {
+        int n=nums.size();
+        memset(dp,-1,sizeof(dp));
         
-        for(int i=0; i<=a; i++){
-            for(int j=0; j<=b; j++){
-                if(i==0 or j==0) dp[i][j] = 0;
-                else if(arr1[i-1] == arr2[j-1]) dp[i][j] = 1+dp[i-1][j-1];
-                else dp[i][j] = max(dp[i-1][j], dp[i][j-1]);
-            }
-        }
-        
-        return dp[a][b];
+        return solve(0,-1,nums,n);
     }
 };
