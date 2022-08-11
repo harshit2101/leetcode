@@ -1,27 +1,42 @@
 class Solution {
 public:
     
-    int dp[101][101];
-    int solve(int i,int j,vector<int>& cuts){
-        if(i>j) return 0;
-        if(dp[i][j]!=-1) return dp[i][j];
+    int dp[102][102];
+//     int solve(int i,int j,vector<int>& cuts){
+//         if(i>j) return 0;
+//         if(dp[i][j]!=-1) return dp[i][j];
         
-        int mini=INT_MAX;
+//         int mini=INT_MAX;
         
-        for(int ind=i;ind<=j;ind++){
-            int cost=cuts[j+1]-cuts[i-1]+solve(i,ind-1,cuts)+solve(ind+1,j,cuts);
+//         for(int ind=i;ind<=j;ind++){
+//             int cost=cuts[j+1]-cuts[i-1]+solve(i,ind-1,cuts)+solve(ind+1,j,cuts);
             
-            mini=min(mini,cost);
-        }
-        return dp[i][j]= mini;
-    }
+//             mini=min(mini,cost);
+//         }
+//         return dp[i][j]= mini;
+//     }
     
     int minCost(int n, vector<int>& cuts) {
         int c=cuts.size();
-        memset(dp,-1,sizeof(dp));
+        memset(dp,0,sizeof(dp));
         cuts.push_back(n);
         cuts.insert(cuts.begin(),0);
-        sort(cuts.begin(),cuts.end()); 
-        return solve(1,c,cuts);
+        sort(cuts.begin(),cuts.end());
+        
+        for(int i=c;i>=1;i--){
+            for(int j=1;j<=c;j++){
+                if(i>j) continue;
+                int mini=INT_MAX;
+        
+                for(int ind=i;ind<=j;ind++){
+                    int cost=cuts[j+1]-cuts[i-1]+ dp[i][ind-1]+dp[ind+1][j];
+
+                    mini=min(mini,cost);
+                }
+                dp[i][j]= mini;
+            }
+        }
+        
+        return dp[1][c];
     }
 };
