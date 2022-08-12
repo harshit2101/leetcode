@@ -1,6 +1,6 @@
 class Solution {
 public:
-    int dp [2001][2001];
+    int dp [2001];
 private:
     bool ispalindrome(string &s,int i,int j){
        // if(i>=j){
@@ -27,8 +27,8 @@ private:
         //     return dp[i][j] =0;
         // }
         
-        if(dp[i][j]!=-1){
-            return dp[i][j];
+        if(dp[i]!=-1){
+            return dp[i];
         }
         
         int mn = INT_MAX;
@@ -38,7 +38,7 @@ private:
             mn = min(temp,mn);
             }
         }
-        return dp[i][j] =mn;
+        return dp[i]=mn;
 
     }
 public:
