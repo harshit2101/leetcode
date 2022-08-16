@@ -1,31 +1,37 @@
 class Solution {
 public:
-    int count=0;
-    void dfs(vector<vector<int>>& grid,int i,int j){
-        if(i<0 || i>=grid.size() || j<0 || j>=grid[0].size() || grid[i][j]==0)
-        {
-            count++;
-            return;
-        }
-
-        if(grid[i][j]==-1)
-            return;
-                
-        grid[i][j]=-1;
-   
-        dfs(grid,i+1,j);
-        dfs(grid,i,j+1);
-        dfs(grid,i-1,j);
-        dfs(grid,i,j-1);
-    }
     int islandPerimeter(vector<vector<int>>& grid) {
-        for(int i=0;i<grid.size();i++){
-            for(int j=0;j<grid[0].size();j++){
-                if(grid[i][j]==1){
-                    dfs(grid,i,j);
+        int m = grid.size(); //row
+        int n = grid[0].size(); //column
+        int ans =0;
+        for(int i =0;i<m;i++)
+        {
+            for(int j = 0;j<n;j++)
+            {
+                if(grid[i][j] == 1)
+                { 
+                    ans+=4; 
+                     
+                 
+                     if( i+1 <m  && grid[i+1][j] == 1  )  
+                       {        
+                         ans--;
+                     }
+                     if(   i-1 >=0 && grid[i-1][j] == 1 ) 
+                     { 
+                         ans--;
+                     }
+                     if(   j-1>=0  && grid[i][j-1] == 1) 
+                     {     
+                           ans--;
+                     }
+                     if(  j+1<n && grid[i][j+1] == 1 ) 
+                     { 
+                         ans--;
+                     }
                 }
             }
         }
-        return count;
+        return ans;
     }
 };
