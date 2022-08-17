@@ -1,58 +1,33 @@
 class Solution {
 public:
-    bool helper(string str, string pat, int i, int j, vector<vector<int>> &dp){
-        
-        if(i >= str.size() && j >= pat.size()){
+    bool solve(string &s, string &p, int n, int m, vector<vector<int>>&dp){
+        if(n == 0 && m == 0) return true;
+        if(m==0 && n!=0) return false;
+        if(n==0 && m!=0 && p[m-1] == '*'){
+            for(int i = m-1; i>=0; i-=2){
+                if(p[i] != '*') return false;
+            }
             return true;
         }
-       
-        if(j >= pat.size()){
-            return false;
-        } 
-        
-        if(dp[i][j] != -1){
-            return dp[i][j];
+        if(n==0 && m!=0) return false;
+        if(dp[n][m] != -1) return dp[n][m];
+        if(s[n-1] == p[m-1] || p[m-1] == '.'){
+            return dp[n][m] = solve(s,p,n-1,m-1,dp);
         }
-        
-        if(i >= str.size()){
-            
-            if(pat[j + 1] == '*'){
-                
-                return dp[i][j] = helper(str, pat, i, j + 2, dp);
+        else if(p[m-1] == '*'){
+            if(p[m-2] == s[n-1] || p[m-2] == '.'){
+                return dp[n][m] = solve(s,p,n-1,m,dp) || solve(s,p,n,m-2,dp);
             }
-            
-            return false;
+            else{
+                return dp[n][m] = solve(s,p,n,m-2,dp);
+            }
         }
-        
-        if(j + 1 < pat.size() && pat[j + 1] == '*'){
-            
-              if(pat[j] == '.' || pat[j] == str[i])
-              {
-                  return dp[i][j] = (helper(str, pat, i + 1, j, dp) || helper(str, pat, i, j + 2, dp));
-              }
-            
-              else{
-                  
-                  return dp[i][j] = helper(str, pat, i, j + 2, dp);
-              }   
-        }
-        
-        else if (pat[j] == '.' || pat[j] == str[i])
-        {
-            return dp[i][j] = helper(str, pat, i + 1, j + 1, dp);
-        }
-        
-        return dp[i][j] = false;   
+        return dp[n][m] = false;
     }
-    
-    bool isMatch(string str, string pat) {
-        
-        int n = str.size();
-        
-        int m = pat.size();
-        
-        vector<vector<int> > dp(n + 1, vector<int> (m + 1, -1));
-        
-        return helper(str, pat, 0, 0, dp) ? true : false;
+    bool isMatch(string s, string p) {
+        int n = s.length();
+        int m = p.length();
+        vector<vector<int>>dp(n+1,vector<int>(m+1,-1));
+        return solve(s,p,n,m,dp);
     }
 };
