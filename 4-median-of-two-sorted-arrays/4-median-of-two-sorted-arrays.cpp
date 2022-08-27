@@ -1,37 +1,37 @@
 class Solution {
 public:
     double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
-        if(nums2.size()<nums1.size()) return findMedianSortedArrays(nums2,nums1);
-        int n1=nums1.size(),n2=nums2.size();
-        int lo=0,hi=n1;
         
-        while(lo<=hi){
-            int cut1=lo+(hi-lo)/2;
-            int cut2=(n1+n2+1)/2-cut1;
+       if(nums1.size()>nums2.size()){
+            return findMedianSortedArrays(nums2,nums1);
+        }
+        int x = nums1.size();
+        int y = nums2.size();
+        
+        int high = x;
+        int low = 0;
+        while(low<=high){
+            int divideX = low + (high - low)/2;
+            int divideY = (x + y + 1)/2 - divideX;
             
-            int l1=cut1==0?INT_MIN:nums1[cut1-1];
-            int l2=cut2==0?INT_MIN:nums2[cut2-1];
+            double maxLeftX = (divideX == 0 ? INT_MIN : nums1[divideX-1]);
+            double minRightX = (divideX == x ? INT_MAX : nums1[divideX]);
             
-            int r1=cut1==n1?INT_MAX:nums1[cut1];
-            int r2=cut2==n2?INT_MAX:nums2[cut2];
+            double maxLeftY = (divideY == 0 ? INT_MIN : nums2[divideY-1]);
+            double minRightY = (divideY == y ? INT_MAX : nums2[divideY]);
             
-            if(l1<=r2 && l2<=r1){
-                if((n1+n2)%2==0){
-                    return (double)(max(l1,l2)+min(r1,r2))/2.0;
+            if(maxLeftX <= minRightY && maxLeftY <= minRightX){
+                if((x+y)%2==0){
+                    return (max(maxLeftX,maxLeftY) + min(minRightX,minRightY))/2.0;
+                }else{
+                    return max(maxLeftX,maxLeftY);
                 }
-                else{
-                    return (double)max(l1,l2);
-                }
-            }
-            
-            else if(l1>r2){
-                hi=cut1-1;
-            }
-            else{
-                lo=cut1+1;
+            }else if(maxLeftX>minRightY){
+                high = divideX-1;
+            }else{
+                low = divideX +1;
             }
         }
-        
-        return 0.0;
+        return 0;
     }
 };
