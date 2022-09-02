@@ -25,10 +25,11 @@ public:
                 TreeNode* node=q.front();
                 q.pop();
                 
+                sum+=node->val;
+                
                 if(node->left) q.push(node->left);
                 if(node->right) q.push(node->right);
                 
-                sum+=node->val;
             }
             
             ans.push_back(sum/n);
