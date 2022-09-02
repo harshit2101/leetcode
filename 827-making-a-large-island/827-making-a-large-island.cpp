@@ -1,7 +1,5 @@
 class Solution {
 public:
-    
-    int dir[4][2]={{1,0},{-1,0},{0,1},{0,-1}};
     int dfs(int i, int j, vector<vector<int>> &grid, int & color,int rows,int cols){      
     
         if(i < 0 || j < 0 || i >= rows || j >= cols)
@@ -13,15 +11,10 @@ public:
         grid[i][j] = color;
 
         int count = 1;
-        
-        for(auto d:dir){
-            int x=i+d[0], y=j+d[1];
-            count+=dfs(x,y,grid,color,rows,cols);
-        }
-        // count += dfs(i + 1, j, grid,color,rows,cols);
-        // count += dfs(i - 1, j , grid,color,rows,cols);
-        // count += dfs(i, j + 1, grid,color,rows,cols);
-        // count += dfs(i, j - 1, grid,color,rows,cols);
+        count += dfs(i + 1, j, grid,color,rows,cols);
+        count += dfs(i - 1, j , grid,color,rows,cols);
+        count += dfs(i, j + 1, grid,color,rows,cols);
+        count += dfs(i, j - 1, grid,color,rows,cols);
 
         return count;
 }
