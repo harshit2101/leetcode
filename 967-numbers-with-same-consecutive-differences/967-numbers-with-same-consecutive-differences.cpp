@@ -1,29 +1,26 @@
 class Solution {
 public:
-   void dfs(vector<int>& ans, int N, int& K, int num){
-        if(N==0){
-            ans.push_back(num);
-            return ;
+   vector<int>ans;
+   void helper(int n, int k,int len,int val){
+        if(len==n){
+            ans.push_back(val);
+            return;
         }
-        int digit = num%10;
-        if(digit + K <=9){
-            dfs(ans, N-1, K, num*10 + digit + K);            
+        int rem=val%10;
+        if(rem+k<=9){
+            helper( n,  k, len+1, val*10+rem+k);
+        }
+         if(k!=0 && (rem-k)>=0){
+             helper( n,  k, len+1, val*10+(rem-k));
         }
         
-        if(digit - K >=0 && K!=0){
-            dfs(ans, N-1, K, num*10 + digit - K);            
-        }
-       
     }
-    vector<int> numsSameConsecDiff(int N, int K) {
-        
-        vector<int> ans;
-        if(N==1) ans.push_back(0);
-	
+    vector<int> numsSameConsecDiff(int n, int k) {
         for(int i=1;i<=9;i++){
-            dfs(ans, N-1, K, i);
+            helper( n,  k, 1, i); 
         }
-        return ans;
         
+        return ans;
+       
     }
 };
