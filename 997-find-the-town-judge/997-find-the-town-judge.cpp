@@ -10,8 +10,7 @@ public:
         }
         
         for(int i=1;i<=n;i++){
-            int x=data[i];
-            if(x==n-1) return i;
+            if(data[i]==n-1) return i;
         }
         
         return -1;
