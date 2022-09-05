@@ -7,8 +7,12 @@ public:
                 st.push_back({c,1});
             }
             
-            else if(++st.back().second == k ) 
-                st.pop_back();
+            else{
+                
+                st.back().second++;
+                
+                if(st.back().second == k ) st.pop_back();
+            }
         }
         string result="";
         for(auto t : st) {
