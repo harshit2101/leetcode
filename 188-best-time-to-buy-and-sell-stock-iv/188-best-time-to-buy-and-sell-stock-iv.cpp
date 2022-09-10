@@ -1,19 +1,16 @@
 class Solution {
 public:
     
-     int maxProfit(int k, vector<int>& prices) {
-        int n = prices.size(), m = 2*k+1;
-        vector<int> dp(m, 0);
-        
-        for(int idx = n-1; idx >= 0; idx--) {
-            for(int jdx = m-1; jdx > 0; jdx--) {
-                if(jdx % 2 == 0)
-                    dp[jdx] = max(dp[jdx],-prices[idx] + dp[jdx-1]);
-                else 
-                    dp[jdx] = max(dp[jdx], prices[idx] + dp[jdx-1]);
+      int maxProfit(int k, vector<int>& prices) {
+       vector<int> buy(k + 1 , 1001);
+       vector<int> sell(k + 1 , 0);
+
+        for (int price : prices) {
+            for (int i = 1; i <= k; i++) {
+                buy[i] = min(buy[i], price - sell[i - 1]);
+                sell[i] = max(sell[i], price - buy[i]);
             }
         }
-        
-        return dp[m-1];
+        return sell[k];
     }
 };
