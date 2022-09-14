@@ -11,14 +11,30 @@
  */
 class Solution {
 public:
-    int pseudoPalindromicPaths(TreeNode *root, int count = 0){
-   
-    if (!root)
-      return 0;
-    count ^= 1 << root->val;
-    int res = pseudoPalindromicPaths(root->left, count) + pseudoPalindromicPaths(root->right, count);
-    if (!root->left && !root->right && (count & (count - 1)) == 0)
-      res++;
-    return res;
-  }
+    
+    void solve(TreeNode* root, vector<int>& v, int& count){
+        if(root==NULL) return;
+        
+        v[root->val]++;
+        solve(root->left,v,count);
+        solve(root->right,v,count);
+        
+        if(!root->left && !root->right){
+            int flag=0;
+            for(int i=1;i<=9;i++){
+                if(v[i]%2!=0) flag++;
+            }
+            if(flag==0 || flag==1) count++;
+        }
+        v[root->val]--;
+    }
+    
+    int pseudoPalindromicPaths (TreeNode* root) {
+        
+        vector<int> v(10,0);
+        int count=0;
+        solve(root,v,count);
+        
+        return count;
+    }
 };
