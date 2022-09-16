@@ -1,20 +1,33 @@
 class Solution {
 public:
     
-    int solve(vector<int>& nums, vector<int>& multipliers,int s,int e,int i,vector<vector<int>>&dp){
-    if(i==multipliers.size()) return 0;
-    if(dp[i][s]!=INT_MIN) return dp[i][s];
-    
-    int left = multipliers[i]*nums[s]+solve(nums,multipliers,s+1,e,i+1,dp);
-    int right = multipliers[i]*nums[e]+solve(nums,multipliers,s,e-1,i+1,dp);
-    
-    return dp[i][s] = max(left,right);
-    }
-    
-    
     int maximumScore(vector<int>& nums, vector<int>& multipliers) {
-    int n = nums.size() , m = multipliers.size();
-    vector<vector<int>>dp(1001,vector<int>(1001,INT_MIN));
-    return solve(nums,multipliers,0,n-1,0,dp);
+        int n = nums.size();
+        int m = multipliers.size();
+        int dp[1005];
+
+        for (int i = 1; i <= m; i++) dp[i] = INT_MIN;
+        dp[0] = 0;
+        
+        for (int i = 1; i <= m; i++) {
+            // dp[k] -> k rear elements has been used
+            int mult = multipliers[i - 1];
+            for (int k = i; k >= 0; k--) {
+                int nv = INT_MIN;
+                if (dp[k] > INT_MIN) {
+                    nv = max(nv, dp[k] + nums[i - k - 1] * mult);                                   }
+                if (k > 0) {
+                    nv = max(nv, dp[k - 1] + nums[n - k] * mult);
+                }
+                dp[k] = nv;
+            }
+        }
+        
+        int ans = dp[0];
+        for (int i = 1; i <= m; i++) {
+            ans = max(ans, dp[i]);
+        }
+
+        return ans;
     }
 };
