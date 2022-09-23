@@ -1,30 +1,16 @@
 class Solution {
 public:
     int concatenatedBinary(int n) {
-        string s=decimalToBinary(n);
-        return binaryToDecimal(s);
-    }
-	
-	string decimalToBinary(int n) { 
-         string str="";
-        for(int i=n;i>=1;--i){
-            int no=i;
-            while(no){
-                str+=(no%2)+'0';
-                no/=2;
-            }
+         int MOD = 1e9+7;
+        long sum = 0;
+        int length = 0;
+        
+        for(int i = 1; i <= n; i++) {
+            if((i & (i - 1)) == 0)
+                length++;
+            sum = ((sum << length) | i) % MOD;
         }
-        return str;
-    } 
-    
-    int binaryToDecimal(string n){
-        long long ans=0,powe=1;
-        for(int j=0;j<n.size();++j){
-                long long now=(n[j]-'0')*(powe);
-                powe*=2;
-                powe%=1000000007;
-                ans+=now;
-        }
-        return ans%1000000007;
+        
+        return (int) sum;
     }
 };
