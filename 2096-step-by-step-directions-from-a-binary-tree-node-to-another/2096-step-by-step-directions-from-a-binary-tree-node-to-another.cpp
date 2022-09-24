@@ -11,48 +11,51 @@
  */
 class Solution {
 public:
-    string nodepath;
-    TreeNode* LCA(TreeNode* root, int x, int y){
-        if(!root)
-            return NULL;
-        if(root->val == x or root->val == y)
-            return root;
-        TreeNode* left_lca = LCA(root->left, x, y);
-        TreeNode* right_lca = LCA(root->right, x, y);
-        
-        if(left_lca and right_lca)
-            return root;
-        
-        return (left_lca != NULL) ? left_lca : right_lca;
+    int lca(TreeNode* node, int p, int q, TreeNode*& ca){
+        if(!node)
+            return 0;
+        int left = 0;
+        int right = 0;
+        int self = (node->val == p || node->val == q)?1:0;
+        left = lca(node->left, p, q, ca);
+        right = lca(node->right, p, q, ca);
+        if(left+right+self==2 && ca==NULL)
+            ca = node;
+        return left+right+self;
     }
     
-    void TracePath(TreeNode* root, int x, string& path){
-        if(!root)
-            return;
-        if(root->val == x){
-            nodepath = path;
-            return;
-        }
-        path += "L";
-        TracePath(root->left, x, path);
-        path.pop_back();
-        path += "R";
-        TracePath(root->right, x, path);
-        path.pop_back();
+    bool solve(TreeNode* node, string& ans, int val, int mode){
+        if(!node)
+            return false;
+        
+        if(node->val == val)
+            return true;
+        if(mode == 1)
+            ans.push_back('U');
+        else
+            ans.push_back('L');
+        if(solve(node->left, ans, val, mode))
+            return true;
+        ans.pop_back();
+        if(mode == 1)
+            ans.push_back('U');
+        else
+            ans.push_back('R');
+        if(solve(node->right, ans, val, mode))
+            return true;
+        ans.pop_back();
+        return false;
     }
-    
+
     string getDirections(TreeNode* root, int startValue, int destValue) {
-        TreeNode* lca = LCA(root, startValue, destValue);
-        
-        string temp = "", startPath, endPath;
-        TracePath(lca, startValue, temp);
-        startPath = nodepath;
-        
-        temp = "";
-        TracePath(lca, destValue, temp);
-        endPath = nodepath;
-        
-        string str(startPath.length(), 'U');
-        return str+endPath;
+        TreeNode* ca = NULL;
+        lca(root, startValue, destValue, ca);
+       
+        string ans = "";
+        solve(ca, ans, startValue, 1);
+       
+        solve(ca, ans, destValue, 2);
+      
+        return ans;
     }
 };
