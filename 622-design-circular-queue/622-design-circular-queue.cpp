@@ -1,45 +1,45 @@
 class MyCircularQueue {
-int currCapacity = 0, maxCapacity, *data, frontPos = 0, rearPos = 0;
 public:
-    MyCircularQueue(int k) {
-        maxCapacity = k;
-        data = new int[k];     
+    vector<int> v;
+    int n,len=0,start=0;
+    MyCircularQueue(int k){
+        n=k;
+        v.resize(k);
     }
     
     bool enQueue(int value) {
-        if (isFull()) return false;
-        currCapacity++;
-        data[rearPos++] = value;
-        if (rearPos == maxCapacity) rearPos = 0;
+        if(isFull())return false;
+        v[(start + len++)%n]=value;
+        // len++;
         return true;
     }
     
     bool deQueue() {
-        if (isEmpty()) return false;
-        currCapacity--;
-        frontPos++;
-        if (frontPos == maxCapacity) frontPos = 0;
+        if(isEmpty())return false;
+        start=(start+1)%n;
+        len--;
         return true;
     }
     
     int Front() {
-        if (isEmpty()) return -1;
-        return data[frontPos];
+        if(isEmpty())return -1;
+        return v[start];
     }
     
     int Rear() {
-        if (isEmpty()) return -1;
-        return data[!rearPos ? maxCapacity - 1 : rearPos - 1];
+        if(isEmpty())return -1;
+        return v[(start+len-1)%n];
     }
     
     bool isEmpty() {
-        return !currCapacity;
+        return !len;
     }
     
     bool isFull() {
-        return currCapacity == maxCapacity;
+        return (len==v.size());
     }
 };
+
 /**
  * Your MyCircularQueue object will be instantiated and called as such:
  * MyCircularQueue* obj = new MyCircularQueue(k);
