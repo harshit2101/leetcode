@@ -1,51 +1,36 @@
 class Solution {
 public:
-    int parent[26];
-    int rank[26];
-    
-    int find(int node){
-        if(node == parent[node]){
-            return node;
-        }
-        return parent[node] = find(parent[node]);
+    int find(vector<int> &arr, int x){
+        if(x != arr[x]) arr[x] = find(arr, arr[x]);
+        return arr[x];
     }
-    
-    void Union(int a, int b){
-        
-        a = find(a);
-        b = find(b);
-        
-        if(rank[a]<rank[b]) parent[a]=b;
-        else if(rank[a]>rank[b]) parent[b]=a;
-        else{
-            parent[b]=a;
-            rank[a]++;
-        }
-    }
-    
     bool equationsPossible(vector<string>& equations) {
+        
+        vector<int> arr(26,0);
         for(int i=0;i<26;i++){
-            parent[i] = i;
-            rank[i] = 1;
+            arr[i] = i;
         }
         
-        for(auto x : equations){
-            if(x[1] == '=')
-                Union(x[0]-'a', x[3]-'a');
+        for(auto x:equations){
+            if(x[1]=='='){
+                int ra = find(arr, x[0]-'a');
+                int rb = find(arr, x[3]-'a');
+                arr[ra] = rb;
+            }
         }
-                
-        for(auto x : equations){
-
-            if(x[1] == '!'){
-                int a = find(x[0]-'a');
-                int b = find(x[3]-'a');
-                
-                if(a == b){
-                    return false;
-                }
+        
+        for(auto x:equations){
+            if(x[1]=='!' && find(arr, x[0]-'a') == find(arr, x[3]-'a')){
+                return false;
             }
         }
         
         return true;
+        
+        
+        
+        
+
+        
     }
 };
