@@ -2,7 +2,7 @@ class Solution {
 public:
     
     #define MOD 1000000007
-    int dp[32][1002];
+    int dp[31][1001];
     
     int solve(int d, int f, int target){
         if(d==0 && target==0) return 1;
