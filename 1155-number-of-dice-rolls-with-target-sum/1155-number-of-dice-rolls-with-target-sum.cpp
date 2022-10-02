@@ -1,24 +1,21 @@
 class Solution {
 public:
-    
-    #define MOD 1000000007
-    int dp[31][1001];
-    
-    int solve(int d, int f, int target){
-        if(d==0 && target==0) return 1;
-        if(d<=0 || target<=0) return 0;
-        if(dp[d][target] != -1) return dp[d][target];
-     
-        int sum=0;
-        for(int i=1;i<=f;i++){
-            sum = (sum % MOD + solve(d-1,f,target-i)%MOD)%MOD;
+    int mod = 1e9+7;
+    int numRollsToTarget(int n, int k, int target) {
+        vector<vector<int>> dp(n+1, vector<int>(target+1, 0));
+        dp[0][0] = 1;
+        for(int i=1; i<=n; i++){
+            for(int t=1; t<=target; t++){
+                int ans = 0;
+                for(int j=1; j<=k; j++){
+                    if(t>=j){
+                        ans = (ans%mod + (dp[i-1][t-j])%mod)%mod;
+                    }
+                }
+                dp[i][t] = ans%mod;
+            }
         }
-        dp[d][target] = sum;
-        return dp[d][target];
+        return dp[n][target];
     }
-    
-    int numRollsToTarget(int d, int f, int target) {
-        memset(dp,-1,sizeof(dp));
-        return solve(d,f,target);
-    }
+
 };
