@@ -12,35 +12,43 @@
 class Solution {
 public:
     
-    void solve(TreeNode* root, int v, int d, int curd){
-        
-        if(root==NULL) return;
-        
-        if(curd==d-1){
-            TreeNode* temp=root->left;
-            root->left=new TreeNode(v);
-            root->left->left=temp;
-            
-            temp=root->right;
-            root->right=new TreeNode(v);
-            root->right->right=temp;
-        }
-        
-        else{
-            solve(root->left,v,d, curd+1);
-            solve(root->right,v,d, curd+1);
-        }
-    }
-    
     TreeNode* addOneRow(TreeNode* root, int val, int depth) {
-        
-        if(depth==1){
-            TreeNode* node=new TreeNode(val);
-            node->left=root;
-            return node;
+        if(!root)
+            return NULL;
+        if(depth==1)
+        {
+            TreeNode*temp=new TreeNode(val);
+            temp->left=root;
+            return temp;
         }
-        
-        solve(root,val,depth,1);
+        if(depth==2)
+        {
+            if(root->left)
+            {
+                TreeNode*l=new TreeNode(val);
+                l->left=root->left;
+                root->left=l;
+            }
+            else
+            {
+                TreeNode*l=new TreeNode(val);
+                root->left=l;
+            }
+            if(root->right)
+            {
+                TreeNode*r=new TreeNode(val);
+                r->right=root->right;
+                root->right=r;
+            }
+            else
+            {
+                TreeNode*r=new TreeNode(val);
+                root->right=r;
+            }
+            return root;
+        }
+        root->left=addOneRow(root->left,val,depth-1);
+        root->right=addOneRow(root->right,val,depth-1);
         return root;
     }
 };
