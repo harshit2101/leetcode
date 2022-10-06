@@ -1,47 +1,47 @@
 class Solution {
 public:
-    int dikstra(vector<vector<int>>& a, vector<vector<int>>& dist)
-    {
-        int n=a.size(), m=a[0].size();
-        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> pq;
-        pq.push({0,0,0});
-        dist[0][0] = 0;
-        while(!pq.empty())
-        {
-            int i = pq.top()[0];
-            int j = pq.top()[1];
-            int w = pq.top()[2];
+    int minimumEffortPath(vector<vector<int>>& heights) {
+        
+        priority_queue<pair<int,pair<int,int>>,
+        vector<pair<int,pair<int,int>>>,
+        greater<pair<int,pair<int,int>>>> pq;
+        
+        int n=heights.size();
+        int m=heights[0].size();
+        
+        vector<vector<int>> dist(n, vector<int>(m,1e9));
+        
+        dist[0][0]=0;
+        pq.push({0,{0,0}});
+        
+        int dr[]={-1,0,1,0};
+        int dc[]={0,1,0,-1};
+        
+        while(!pq.empty()){
+            
+            auto it=pq.top();
             pq.pop();
             
-            if(i>0 && dist[i-1][j]>max(w,abs(a[i][j]-a[i-1][j])) )
-            {
-                dist[i-1][j] = max(w,abs(a[i][j]-a[i-1][j]));
-                pq.push({i-1,j,dist[i-1][j]});
-            }
-            if(i<n-1 && dist[i+1][j]>max(w,abs(a[i][j]-a[i+1][j])) )
-            {
-                dist[i+1][j] = max(w,abs(a[i][j]-a[i+1][j]));
-                pq.push({i+1,j,dist[i+1][j]});
-            }
-            if(j>0 && dist[i][j-1]>max(w,abs(a[i][j]-a[i][j-1])) )
-            {
-                dist[i][j-1] = max(w,abs(a[i][j]-a[i][j-1]));
-                pq.push({i,j-1,dist[i][j-1]});
-            }
-            if(j<m-1 && dist[i][j+1]>max(w,abs(a[i][j]-a[i][j+1])) )
-            {
-                dist[i][j+1] = max(w,abs(a[i][j]-a[i][j+1]));
-                pq.push({i,j+1,dist[i][j+1]});
+            int diff=it.first;
+            int row=it.second.first;
+            int col=it.second.second;
+            
+            if(row==n-1 && col==m-1) return diff;
+            
+            for(int i=0;i<4;i++){
+                int newr=row+dr[i];
+                int newc=col+dc[i];
+                
+                if(newr>=0 && newr<n && newc>=0 && newc<m){
+                    int effort = max(abs(heights[row][col] - heights[newr][newc]), diff);
+                    if(effort<dist[newr][newc]){
+                        dist[newr][newc]=effort;
+                        pq.push({dist[newr][newc],{newr,newc}});
+                    }
+                }
             }
         }
         
-        return dist[n-1][m-1];
-    }
-    
-    int minimumEffortPath(vector<vector<int>>& a) {
-        int n=a.size(), m=a[0].size();
-        vector<vector<int>> dist(n, vector<int>(m,INT_MAX));
-        int ans = dikstra(a,dist);
-        return ans;
+        return 0;
     }
 };
