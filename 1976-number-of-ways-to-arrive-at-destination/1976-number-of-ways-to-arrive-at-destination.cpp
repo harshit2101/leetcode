@@ -1,5 +1,5 @@
 #define ll long long
-#define pll pair<long long, long long>
+#define pll pair<ll, ll>
 class Solution {
 public:
     int MOD = 1e9 + 7;
