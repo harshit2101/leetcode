@@ -28,8 +28,8 @@ public:
             }
             if(count<=mincount){
                 mincount=count;
-                ans=max(ans,i);
-                // ans=i;
+                // ans=max(ans,i);
+                ans=i;
             }
         }
         
