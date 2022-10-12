@@ -9,7 +9,7 @@ public:
             matrix[it[1]][it[0]]=it[2];
         }
         
-        // for(int i=0;i<n;i++) matrix[i][i]=0;
+        for(int i=0;i<n;i++) matrix[i][i]=0;
         
         for(int k=0;k<n;k++){
             for(int i=0;i<n;i++){
