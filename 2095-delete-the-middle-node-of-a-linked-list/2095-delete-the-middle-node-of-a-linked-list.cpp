@@ -25,6 +25,7 @@ public:
         }
         
         prev->next=prev->next->next;
+        slow->next=NULL;
         return head;
     }
 };
