@@ -1,4 +1,4 @@
-// { Driver Code Starts
+//{ Driver Code Starts
 //Initial Template for C++
 
 #include <bits/stdc++.h>
@@ -88,9 +88,7 @@ Node* buildTree(string str)
 }
 
 
- // } Driver Code Ends
-
-
+// } Driver Code Ends
 /*
 struct Node
 {
@@ -109,27 +107,25 @@ class Solution
         vector<int> ans;
         if(!root) return ans;
         
-        map<int,int> m;
-        queue<pair<Node*,int>> q;
-        
-        q.push(make_pair(root,0));
+        map<int,int> mp;
+        queue<pair<Node*, int>> q;
+        q.push({root,0});
         
         while(!q.empty()){
-            pair<Node*, int> p=q.front();
+            auto it=q.front();
             q.pop();
-            Node* frontNode=p.first;
-            int hd=p.second;
             
-            // agar map me hor. dist, nahi hai then wo top view wala hai
-            if(m.find(hd)==m.end()){
-                m[hd]=frontNode->data;
-            }
+            Node* node=it.first;
+            int line=it.second;
             
-            if(frontNode->left) q.push(make_pair(frontNode->left,hd-1));
-            if(frontNode->right) q.push(make_pair(frontNode->right,hd+1));
+            if(mp.find(line)==mp.end()) mp[line]=node->data;
+            
+            if(node->left) q.push({node->left, line-1});
+            
+            if(node->right) q.push({node->right, line+1});
         }
         
-        for(auto it: m){
+        for(auto it: mp){
             ans.push_back(it.second);
         }
         
@@ -140,7 +136,7 @@ class Solution
 
 
 
-// { Driver Code Starts.
+//{ Driver Code Starts.
 
 int main() {
     int tc;
@@ -157,4 +153,5 @@ int main() {
         cout<<endl;
     }
     return 0;
-}  // } Driver Code Ends
+}
+// } Driver Code Ends
