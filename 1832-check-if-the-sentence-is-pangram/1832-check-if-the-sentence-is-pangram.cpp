@@ -1,13 +1,15 @@
 class Solution {
 public:
     bool checkIfPangram(string sentence) {
-        unordered_map<char,int> count;
+        vector<int> count(26,0);
         
         for(int i=0;i<sentence.size();i++){
-            count[sentence[i]]++;
+            count[sentence[i]-'a']++;
         }
         
-        if(count.size()==26) return true;
-        return false;
+        for(int i=0;i<26;i++){
+            if(count[i]==0) return false;
+        }
+        return true;
     }
 };
