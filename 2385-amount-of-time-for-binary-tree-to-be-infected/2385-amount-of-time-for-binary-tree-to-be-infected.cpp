@@ -12,7 +12,7 @@
 class Solution {
 public:
     
-    int solve(map<TreeNode*, TreeNode*> parent, TreeNode* target){
+    int solve(unordered_map<TreeNode*, TreeNode*> parent, TreeNode* target){
         unordered_map<TreeNode*,bool> vis;
         vis[target]=true;
         
@@ -55,7 +55,7 @@ public:
         return time;
     }
     
-    TreeNode* makeParent(TreeNode* root,map<TreeNode*, TreeNode*>& parent, int start){
+    TreeNode* makeParent(TreeNode* root,unordered_map<TreeNode*, TreeNode*>& parent, int start){
         TreeNode* target;
         queue<TreeNode*> q;
         q.push(root);
@@ -80,7 +80,7 @@ public:
     }
     
     int amountOfTime(TreeNode* root, int start) {
-        map<TreeNode*, TreeNode*> parent;
+        unordered_map<TreeNode*, TreeNode*> parent;
         TreeNode* target= makeParent(root, parent, start);
         int ans= solve(parent, target);
         return ans;
