@@ -12,11 +12,9 @@ class Solution {
 public:
     ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
         
-        ListNode* list=new ListNode();
-        ListNode* temp=list;
-        
-        
-        // if(!list1 && !list2) return list;
+        ListNode* list, *temp;
+        list=new ListNode();
+        temp=list;
         
         while(list1 && list2){
             if(list1->val<list2->val){
