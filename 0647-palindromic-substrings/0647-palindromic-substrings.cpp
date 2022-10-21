@@ -13,9 +13,9 @@ public:
     
     int countSubstrings(string s) {
         
-        int count=1;
+        int count=0;
         
-        for(int i=0;i<s.size()-1;i++){
+        for(int i=0;i<s.size();i++){
             int odd=solve(s,i,i,count);
             int even=solve(s,i,i+1,count);
         }
