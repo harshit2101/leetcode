@@ -21,13 +21,13 @@ public:
         
         string ans="";
         
-        for(int i=0;i<s.size();i++){
+        for(int i=0;i<s.size()-1;i++){
             string odd=solve(s,i,i);
             if(odd.size()>=ans.size()) ans=odd;
-            if(i+1<s.size() && s[i]==s[i+1]){
+            
                 string even=solve(s,i,i+1);
                 if(even.size()>=ans.size()) ans=even;
-            }
+            
         }
         
         return ans;
