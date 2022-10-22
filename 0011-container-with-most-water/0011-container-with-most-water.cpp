@@ -10,14 +10,8 @@ public:
             int mini=min(height[i],height[j]);
             ans=max(ans,mini*(j-i));
             
-            if(height[i]<height[j]){
-                // temp=height[i];
-                i++;
-            }
-            else{
-                // temp=height[j];
-                j--;
-            }
+            if(height[i]<height[j])i++;
+            else j--;
             
         }
         
