@@ -29,7 +29,8 @@ public:
         }
         
         slow->next=slow->next->next;
+        head=dummy->next;
         
-        return dummy->next;
+        return head;
     }
 };
