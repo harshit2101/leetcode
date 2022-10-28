@@ -1,31 +1,35 @@
 class Solution {
 public:
     
-    void dfs(int x,vector<int>& vis,vector<vector<int>>& adj){
-        vis[x]=true;
-        for(auto i : adj[x]){
-            if(!vis[i])
-                dfs(i,vis,adj);
-        }
+    int get(int x, vector<int> &parent){
+        return parent[x] = parent[x] == x? x: get(parent[x], parent);
     }
-    
-    int makeConnected(int n, vector<vector<int>>& conn) {
-        if(conn.size() < n-1)
-            return -1;
-       vector<vector<int>>adj(n);
-        vector<int> vis(n,false);
-        for(int i=0; i<conn.size(); i++){
-            adj[conn[i][0]].push_back(conn[i][1]);
-            adj[conn[i][1]].push_back(conn[i][0]);
-        }
-        int c=0;
+    void merge(int l, int r, vector<int> &parent, vector<int>&rank){
+        l = get(l, parent);
+        r = get(r, parent);
+        if(rank[l] == rank[r]) rank[l]++;
+        if(rank[l] > rank[r]) parent[r] = l;
+        else parent[l] = r;
+        return ;
+    }
+    int makeConnected(int n, vector<vector<int>>& connections) {
+        int totalEdges = connections.size();
+        if(totalEdges < n-1) return -1;
+        vector<int> parent(n);
+        vector<int> rank(n, 0);
         for(int i=0; i<n; i++){
-            if(!vis[i])
-            {
-                dfs(i,vis,adj);
-                c++;
-            }
+            parent[i] = i;
         }
-        return c-1;
+        for(int i=0; i<connections.size(); i++){
+            int u = connections[i][0];
+            int v = connections[i][1];
+            merge(u,v, parent, rank);
+        }
+        int count = 0;
+        for(int i=0; i<n; i++){
+            if(parent[i] == i) count++;
+        }
+        return count-1;
+        
     }
 };
