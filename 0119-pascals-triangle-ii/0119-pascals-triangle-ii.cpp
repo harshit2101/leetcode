@@ -1,16 +1,17 @@
 class Solution {
 public:
     vector<int> getRow(int r) {
-        vector<int> ans(r+1,0);
-        long long x=1,n=r;
-        
-        for(int i=0;i<=r/2;i++,n--){
-             
-            ans[i]=x;
-            ans[r-i]=x;
-            x=x*n/(i+1);
-         }
-        return ans;
-       
+        vector<int> v(r+1);
+        v[0] = 1;
+
+        for(int i = 1 ; i <= r; i++)
+        {
+            for(int j = i ; j >=1 ; j--)
+            {
+                v[j] += v[j-1];
+            }
+        }
+
+        return v;
     }
 };
