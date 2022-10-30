@@ -36,6 +36,6 @@ public:
             dist++;
         }
         
-        return minDist == INT_MAX ? -1 : minDist;
+        return -1;
     }
 };
