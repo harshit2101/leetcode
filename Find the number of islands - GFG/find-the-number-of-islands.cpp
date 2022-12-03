@@ -7,25 +7,16 @@ class Solution {
   public:
     // Function to find the number of islands.
     
-    void bfs(vector<vector<char>>& grid, int m,int n, vector<vector<int>>& vis,int row,int col){
+    void dfs(vector<vector<char>>& grid, int m,int n, vector<vector<int>>& vis,int row,int col){
         vis[row][col]=1;
-        queue<pair<int,int>>q;
-        q.push({row,col});
         
-        while(!q.empty()){
-            int nrow=q.front().first;        
-            int ncol=q.front().second;
-            q.pop();
-            
-            for(int i=-1;i<=1;i++){
-                for(int j=-1;j<=1;j++){
-                    int nr=nrow+i;
-                    int nc=ncol+j;
+        for(int i=-1;i<=1;i++){
+            for(int j=-1;j<=1;j++){
+                int nr=row+i;
+                int nc=col+j;
                     
-                    if(nr>=0 && nr<m && nc>=0 && nc<n && grid[nr][nc]=='1' && !vis[nr][nc]){
-                        vis[nr][nc]=1;
-                        q.push({nr,nc});
-                    }
+                if(nr>=0 && nr<m && nc>=0 && nc<n && grid[nr][nc]=='1' && !vis[nr][nc]){
+                    dfs(grid,m,n,vis,nr,nc);
                 }
             }
         }
@@ -42,7 +33,7 @@ class Solution {
             for(int j=0;j<n;j++){
                 if(!vis[i][j] && grid[i][j]=='1'){
                     count++;
-                    bfs(grid,m,n,vis,i,j);
+                    dfs(grid,m,n,vis,i,j);
                 }
             }
         }
