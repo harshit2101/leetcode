@@ -1,39 +1,40 @@
-// { Driver Code Starts
+//{ Driver Code Starts
 #include <bits/stdc++.h>
 using namespace std;
 
- // } Driver Code Ends
+// } Driver Code Ends
 class Solution {
   public:
+    // Function to detect cycle in a directed graph.
     
-    bool solve(vector<int>& vis,vector<int>& dfsvis,int node,vector<int> adj[]){
+    bool dfs(vector<int> adj[],vector<int>& vis, vector<int>& dfsvis, int node){
         vis[node]=1;
         dfsvis[node]=1;
+        
         for(auto it:adj[node]){
             if(!vis[it]){
-                if(solve(vis,dfsvis,it,adj)) return true;
+                if(dfs(adj,vis,dfsvis,it)) return true;
             }
-            else if(dfsvis[it]){
-                return true;
-            }
+            else if(dfsvis[it]) return true;
         }
         dfsvis[node]=0;
         return false;
     }
     
     bool isCyclic(int V, vector<int> adj[]) {
+        
         vector<int> vis(V,0);
         vector<int> dfsvis(V,0);
+        
         for(int i=0;i<V;i++){
-            if(!vis[i]){
-                if(solve(vis,dfsvis,i,adj)) return true;
-            }
+            if(!vis[i] && dfs(adj,vis,dfsvis,i)) return true;
         }
+        
         return false;
     }
 };
 
-// { Driver Code Starts.
+//{ Driver Code Starts.
 
 int main() {
 
@@ -57,4 +58,5 @@ int main() {
 
     return 0;
 }
-  // } Driver Code Ends
+
+// } Driver Code Ends
