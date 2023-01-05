@@ -1,48 +1,52 @@
-// { Driver Code Starts
+//{ Driver Code Starts
 // Initial template for C++
 
 #include <bits/stdc++.h>
 using namespace std;
 
 
- // } Driver Code Ends
+// } Driver Code Ends
 // User function template for C++
 
 class Solution{
     public:
-    void solve(vector<vector<int>> m, vector<string> &ans, string p, int i, int j, int n){
-        if(i == (n - 1) && j == (n - 1)){
-            ans.push_back(p);
+    
+    void solve(vector<string>& ans, string temp, vector<vector<int>>& vis, int dr[], int dc[], int i, int j, vector<vector<int>>& m, int n){
+        if(i==n-1 &&j==n-1){
+            ans.push_back(temp);
             return;
         }
-        m[i][j] = 0;
-        if(((i + 1) < n) && (m[i + 1][j] == 1))
-            solve(m, ans, p + "D", (i + 1), (j), n);
-        if(((j + 1) < n) && (m[i][j + 1] == 1))
-            solve(m, ans, p + "R", (i), (j + 1), n);
-        if((i > 0) && (m[i - 1][j] == 1))
-            solve(m, ans, p + "U", (i - 1), (j), n);
-        if((j > 0) && (m[i][j - 1] == 1))
-            solve(m, ans, p + "L", (i), (j - 1), n);
-        m[i][j] = 1;
+        
+        string dir="DLRU";
+        
+        for(int k=0;k<4;k++){
+            int nr=i+dr[k];
+            int nc=j+dc[k];
             
+            if(nr>=0 && nr<n && nc>=0 && nc<n && !vis[nr][nc] && m[nr][nc]==1){
+                vis[i][j]=1;
+                solve(ans,temp+dir[k],vis,dr,dc,nr,nc,m,n);
+                vis[i][j]=0;
+            }
+        }
     }
+    
     vector<string> findPath(vector<vector<int>> &m, int n) {
-        // Your code goes here
-        vector <string> ans;
-        if(m[0][0]==0)
-           return ans;
-        if(m[n-1][n-1]==0)
-           return ans;
-        solve(m, ans, "", 0, 0, n);
-        sort(ans.begin(), ans.end());
+        vector<string> ans;
+        string temp;
+        vector<vector<int>> vis(n,vector<int>(n,0));
+        int dr[]={1,0,0,-1};
+        int dc[]={0,-1,1,0};
+        
+        if(m[0][0]==1) solve(ans,temp,vis,dr,dc,0,0,m,n);
         return ans;
     }
 };
+
     
 
 
-// { Driver Code Starts.
+//{ Driver Code Starts.
 
 int main() {
     int t;
@@ -66,4 +70,5 @@ int main() {
         cout << endl;
     }
     return 0;
-}  // } Driver Code Ends
+}
+// } Driver Code Ends
