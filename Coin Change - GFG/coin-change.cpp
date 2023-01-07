@@ -23,8 +23,24 @@ class Solution {
   
     long long int count(int coins[], int N, int sum) {
 
-        vector<vector<long>> dp(N, vector<long>(sum+1,-1));
-        return solve(coins,N-1,sum,dp);
+        vector<vector<long>> dp(N, vector<long>(sum+1,0));
+        // return solve(coins,N-1,sum,dp);
+        
+        
+        for(int j=0;j<=sum;j++) dp[0][j]= j%coins[0]==0;
+        
+        for(int i=1;i<N;i++){
+            for(int j=0;j<=sum;j++){
+                long long int take=0;
+                long long int nottake= dp[i-1][j];
+                if(coins[i]<=j) take=dp[i][j-coins[i]];
+                
+                
+                dp[i][j] =take + nottake;
+            }
+        }
+        
+        return dp[N-1][sum];
     }
 };
 
