@@ -18,18 +18,36 @@ class Solution{
         
         if(dp[ind][n]!=-1) return dp[ind][n];
         
-        int nottake=solve(price,n,ind-1,dp);
-        int take=INT_MIN;
-        int rodL=ind+1;
-        if(rodL<=n) take=price[ind]+solve(price,n-rodL,ind,dp);
         
-        return dp[ind][n]= max(nottake,take);
+        // int take=INT_MIN;
+        int rodL=ind+1;
+        if(rodL<=n) return dp[ind][n]=price[ind]+solve(price,n-rodL,ind,dp);
+        return dp[ind][n]=solve(price,n,ind-1,dp);
+        // return dp[ind][n]= max(nottake,take);
     }
   
     int cutRod(int price[], int n) {
         
-        vector<vector<int>> dp(n,vector<int>(n+1,-1));
-        return solve(price,n,n-1,dp);
+        vector<vector<int>> dp(n,vector<int>(n+1,0));
+        // return solve(price,n,n-1,dp);
+        
+        for(int j=0;j<=n;j++){
+            dp[0][j]=j*price[0];
+        }
+        
+        
+        for(int i=1;i<n;i++){
+            for(int j=0;j<=n;j++){
+                int nottake=dp[i-1][j];
+                int take=INT_MIN;
+                int rodL=i+1;
+                if(rodL<=j) take=price[i]+dp[i][j-rodL];
+                
+                dp[i][j]= max(nottake,take);
+            }
+        }
+        
+        return dp[n-1][n];
     }
 };
 
